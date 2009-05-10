@@ -42,7 +42,6 @@ If you want to use these functions, I recommend you implementing them and append
 === stdio.h ===
  * FILE
  * fpos_t
- * EOF
  * FILENAME_MAX
  * TMP_MAX
  * stderr
