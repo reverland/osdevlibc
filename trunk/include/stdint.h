@@ -124,19 +124,19 @@ typedef int_least64_t				int_fast64_t;
 typedef uint_least64_t				uint_fast64_t;
 
 
-#if	__SIZEOF_POINTER__ == 1
+#if	__SIZEOF_POINTER__ <= 1
 typedef char					intptr_t;
 typedef unsigned char			uintptr_t;
-#elif	__SIZEOF_POINTER__ == __SIZEOF_SHORT__
+#elif	__SIZEOF_POINTER__ <= __SIZEOF_SHORT__
 typedef short					intptr_t;
 typedef unsigned short			uintptr_t;
-#elif	__SIZEOF_POINTER__ == __SIZEOF_INT__
+#elif	__SIZEOF_POINTER__ <= __SIZEOF_INT__
 typedef int					intptr_t;
 typedef unsigned int				uintptr_t;
-#elif	__SIZEOF_POINTER__ == __SIZEOF_LONG__
+#elif	__SIZEOF_POINTER__ <= __SIZEOF_LONG__
 typedef long					intptr_t;
 typedef unsigned long			uintptr_t;
-#elif	__SIZEOF_POINTER__ == __SIZEOF_LONG_LONG__
+#elif	__SIZEOF_POINTER__ <= __SIZEOF_LONG_LONG__
 typedef long long				intptr_t;
 typedef unsigned long long		uintptr_t;
 #endif
