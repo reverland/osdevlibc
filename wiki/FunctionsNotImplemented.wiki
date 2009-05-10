@@ -6,10 +6,38 @@ In a real C standard library, these functions would use o/s-specific system call
 
 If you want to use these functions, I recommend you implementing them and appending them to this code.
 
+*Headers not listed have not yet been studied.*
 
 === locale.h ===
 
-_Nothing will be implemented_
+*Nothing* will be implemented
+
+
+=== stdarg.h ===
+
+_Everything will be implemented_
+
+
+=== stdbool.h ===
+
+_Everything will be implemented_
+
+
+=== stdio.h ===
+
+*Nothing* will be implemented *except*:
+ * snprintf
+ * sprintf
+ * sscanf
+ * vsscanf
+ * vsnprintf
+ * vsprintf
+ * vsscanf
+
+
+=== stddef.h ===
+
+_Everything will be implemented_
 
 
 === string.h ===
