@@ -39,7 +39,6 @@ size_t	strspn	(const char* s1, const char* s2);
 char*	strstr		(const char* s1, const char* s2);
 char*	strtok	(char* s1, const char* s2);
 void*	memset	(void* s, int c, size_t n);
-char*	strerror	(int errnum);
 size_t	strlen		(const char* s)							__attribute__((pure));
 
 #endif
