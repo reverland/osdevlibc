@@ -43,6 +43,7 @@ _Everything will be implemented_
 === string.h ===
  * strcoll
  * strxfrm
+ * strerror
 
 
 === time.h ===
