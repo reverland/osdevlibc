@@ -22,6 +22,9 @@ If you want to use these functions, I recommend you implementing them and append
 
 
 === locale.h ===
+ * struct lconv
+ * setlocale
+ * localeconv
 
 
 === signal.h ===
@@ -103,6 +106,8 @@ If you want to use these functions, I recommend you implementing them and append
 
 
 === string.h ===
+ * strcoll
+ * strxfrm
  * strerror
 
 
@@ -138,3 +143,5 @@ If you want to use these functions, I recommend you implementing them and append
  * putwc
  * putwchar
  * ungetwc
+ * wcscoll
+ * wcsxfrm
