@@ -1,0 +1,16 @@
+#summary OSDev libC headers not part of ISO C
+#labels Phase-Deploy
+
+=== machine/_target.h ===
+
+This header tries to detect what is the current compilation target using compiler-specific headers.
+
+{{{
+_TARGET_X86_
+_TARGET_ARM_
+_TARGET_MIPS_
+_TARGET_POWERPC_
+}}}
+
+
+
