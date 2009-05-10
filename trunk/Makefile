@@ -1,5 +1,5 @@
 BINARY=bin/libc.a
-OBJS=build/assert.o build/stdio.o build/stdlib.o build/string.o build/wchar.o
+OBJS=build/assert.o build/stdio.o build/stdlib.o build/string.o
 
 
 build/%.o : src/%.c
