@@ -8,31 +8,85 @@ If you want to use these functions, I recommend you implementing them and append
 
 *Headers not listed have not yet been studied.*
 
-=== locale.h ===
+=== assert.h ===
+ * assert
 
-*Nothing* will be implemented
+
+=== ctype.h ===
+
+
+=== iso646.h ===
+
+
+=== limits.h ===
+
+
+=== locale.h ===
+ * struct lconv
+ * setlocale
+ * localeconv
+
+
+=== signal.h ===
+ * sig_atomic_t
+ * signal
+ * raise
 
 
 === stdarg.h ===
 
-_Everything will be implemented_
-
 
 === stdbool.h ===
 
-_Everything will be implemented_
-
 
 === stdio.h ===
-
-*Nothing* will be implemented *except*:
- * snprintf
- * sprintf
- * sscanf
- * vsscanf
- * vsnprintf
- * vsprintf
- * vsscanf
+ * FILE
+ * fpos_t
+ * EOF
+ * FILENAME_MAX
+ * TMP_MAX
+ * stderr
+ * stdin
+ * stdout
+ * remove
+ * rename
+ * tmpfile
+ * tmpnam
+ * fclose
+ * fflush
+ * fopen
+ * freopen
+ * setbuf
+ * setvbuf
+ * fprintf
+ * fscanf
+ * printf
+ * scanf
+ * vfprintf
+ * vfscanf
+ * vprintf
+ * fgetc
+ * fgets
+ * fputc
+ * fputs
+ * getc
+ * getchar
+ * gets
+ * putc
+ * putchar
+ * puts
+ * ungetc
+ * fread
+ * fwrite
+ * fgetpos
+ * fseek
+ * fsetpos
+ * ftell
+ * rewind
+ * clearerr
+ * feof
+ * ferror
+ * perror
 
 
 === stdlib.h ===
@@ -43,14 +97,12 @@ _Everything will be implemented_
  * abort
  * atexit
  * exit
- * _Exit
+ * Exit
  * getenv
  * system
 
 
 === stddef.h ===
-
-_Everything will be implemented_
 
 
 === string.h ===
