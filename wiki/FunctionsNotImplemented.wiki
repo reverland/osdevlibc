@@ -6,19 +6,10 @@ In a real C standard library, these functions would use o/s-specific system call
 
 If you want to use these functions, I recommend you implementing them and appending them to this code.
 
-*Headers not listed have not yet been studied.*
+*Headers not listed here are fully implemented.*
 
 === assert.h ===
  * assert
-
-
-=== ctype.h ===
-
-
-=== iso646.h ===
-
-
-=== limits.h ===
 
 
 === locale.h ===
@@ -31,12 +22,6 @@ If you want to use these functions, I recommend you implementing them and append
  * sig_atomic_t
  * signal
  * raise
-
-
-=== stdarg.h ===
-
-
-=== stdbool.h ===
 
 
 === stdio.h ===
@@ -102,6 +87,7 @@ If you want to use these functions, I recommend you implementing them and append
 
 
 === stddef.h ===
+ * wchar_t
 
 
 === string.h ===
@@ -124,23 +110,5 @@ If you want to use these functions, I recommend you implementing them and append
 
 
 === wchar.h ===
- * fwprintf
- * fwscanf
- * vfwprintf
- * vfwscanf
- * vwprintf
- * vwscanf
- * wprintf
- * wscanf
- * fgetwc
- * fgetws
- * fputwc
- * fputws
- * fwide
- * getwc
- * getwchar
- * putwc
- * putwchar
- * ungetwc
- * wcscoll
- * wcsxfrm
+
+_Nothing will be implemented_
