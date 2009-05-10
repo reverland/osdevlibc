@@ -34,11 +34,11 @@ void* memcpy(void* destination, const void* source, size_t num) {
 }
 
 void* memmove(void* destination, const void* source, size_t num) {
-#ifdef _TARGET_X86xxx_
+#ifdef _TARGET_X86_
 	if (destination < source)
 		asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
 	else
-		asm("std; rep movsb" :: "S"((unsigned char*)source + num), "D"((unsigned char*)destination + num), "c"((long)num) : "flags", "memory");
+		asm("std; rep movsb" :: "S"((unsigned char*)source + num - 1), "D"((unsigned char*)destination + num - 1), "c"((long)num) : "flags", "memory");
 #else
 	const unsigned char* sp;
 	unsigned char* dp;
