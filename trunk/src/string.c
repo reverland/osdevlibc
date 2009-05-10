@@ -223,8 +223,6 @@ void* memset(void* ptr, int value, size_t num) {
 	return ptr;
 }
 
-char*	strerror	(int errnum);
-
 size_t strlen(const char* str) {
 	size_t len = 0;
 #ifdef _TARGET_X86_
