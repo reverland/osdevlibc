@@ -136,7 +136,7 @@ size_t strcspn(const char* s1, const char* s2) {
 }
 
 char* strpbrk(const char* s1, const char* s2) {
-	int s2len = strlen(s2) / sizeof(char);
+	int s2len = strlen(s2);
 	for (; *s1 != '\0'; s1++) {
 		int i;
 		for (i = 0; i < s2len; i++)
@@ -147,7 +147,7 @@ char* strpbrk(const char* s1, const char* s2) {
 }
 
 char* strrchr(const char* str, int character) {
-	int i = strlen(str) / sizeof(char);
+	int i = strlen(str);
 	for (; i >= 0; i--)
 		if (str[i] == character)
 			return (char*)str + i;
