@@ -35,6 +35,19 @@ _Everything will be implemented_
  * vsscanf
 
 
+=== stdlib.h ===
+ * calloc
+ * free
+ * malloc
+ * realloc
+ * abort
+ * atexit
+ * exit
+ * _Exit
+ * getenv
+ * system
+
+
 === stddef.h ===
 
 _Everything will be implemented_
