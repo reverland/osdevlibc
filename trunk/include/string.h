@@ -44,7 +44,7 @@ size_t	strlen		(const char* s)							__attribute__((pure));
 
 // macros for optimization
 //#define	strcpy(d, s) 				((char*)memcpy(d, s, strlen(s) + 1))
-#define	strncmp(s1, s2, n)			((char*)memcmp(s1, s2, n))
+#define	strncmp(s1, s2, n)			memcmp(s1, s2, n)
 //#define	strchr(s, c)					((char*)memchr(s, c, strlen(s) + 1))
 
 #endif
