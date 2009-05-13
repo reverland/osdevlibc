@@ -228,10 +228,10 @@ void* memset(void* ptr, int value, size_t num) {
 
 size_t strlen(const char* str) {
 	size_t len = 0;
-#ifdef _TARGET_X86_
+#ifdef slmqkdqsdfjklqsdg //_TARGET_X86_
 	const char* endPtr;
 	asm("cld; repnz scasb" : "=D"(endPtr) : "D"(str), "a"(0) : "flags");
-	len = endPtr - str;
+	len = (endPtr - str) - 1;
 #else
 	while (*str != '\0') { str++; len++; }
 #endif
