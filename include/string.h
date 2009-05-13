@@ -41,4 +41,10 @@ char*	strtok	(char* s1, const char* s2);
 void*	memset	(void* s, int c, size_t n);
 size_t	strlen		(const char* s)							__attribute__((pure));
 
+
+// macros for optimization
+//#define	strcpy(d, s) 				((char*)memcpy(d, s, strlen(s) + 1))
+#define	strncmp(s1, s2, n)			((char*)memcmp(s1, s2, n))
+//#define	strchr(s, c)					((char*)memchr(s, c, strlen(s) + 1))
+
 #endif
