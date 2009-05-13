@@ -1,6 +1,8 @@
 BINARY=bin/libc.a
-OBJS=build/assert.o build/stdio.o build/stdlib.o build/string.o
+OBJS=build/stdio.o build/stdlib.o build/string.o
 
+all : $(BINARY)
+	
 
 build/%.o : src/%.c
 	gcc -nostdlib -I include/ -c -O3 -o $@ $^
@@ -8,4 +10,3 @@ build/%.o : src/%.c
 $(BINARY) : $(OBJS)
 	rm -f $@
 	ar -rs $@ $^
-

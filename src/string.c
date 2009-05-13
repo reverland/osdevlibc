@@ -57,6 +57,7 @@ void* memmove(void* destination, const void* source, size_t num) {
 	return destination;
 }
 
+#undef strcpy
 char* strcpy(char* destination, const char* source) {
 	return memcpy(destination, source, strlen(source) + 1);
 }
@@ -69,6 +70,7 @@ char* strncpy(char* destination, const char* source, size_t n) {
 	return destination;
 }
 
+#undef strcat
 char* strcat(char* s1, const char* s2) {
 	strcpy(s1 + strlen(s1), s2);
 	return s1;
@@ -109,6 +111,7 @@ int strcmp(const char* str1, const char* str2) {
 	return 0;
 }
 
+#undef strncmp
 int strncmp(const char* s1, const char* s2, size_t n) {
 	return memcmp(s1, s2, n);
 }
@@ -123,6 +126,7 @@ void* memchr(const void* ptr, int value, size_t num) {
 	return NULL;
 }
 
+#undef strchr
 char* strchr(const char* s, int c) {
 	return memchr(s, c, strlen(s) + 1);
 }

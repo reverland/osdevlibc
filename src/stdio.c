@@ -167,8 +167,8 @@ int vsnprintf(char* str, size_t size, const char* format, va_list ap) {
 				// 	characters
 				case 'c': {
 					char toWrite;
-					if (numberMustBeLong)		toWrite = (char)va_arg(ap, wchar_t);
-					else					toWrite = (char)va_arg(ap, int);
+					/*if (numberMustBeLong)		toWrite = (char)va_arg(ap, wchar_t);
+					else					*/toWrite = (char)va_arg(ap, int);
 					
 					if (!alignLeft) {
 						for (; minimumWidth > 1; minimumWidth--)
