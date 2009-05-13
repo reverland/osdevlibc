@@ -55,6 +55,12 @@ lldiv_t				lldiv		(long long int numer, long long int denom);
 
 // TODO: 7.20.7 and 7.20.8
 
+
+/*#define		abs(x)			((x >= 0) ? (x) : -(x))
+#define		labs(x)			((x >= 0) ? (x) : -(x))
+#define		llabs(x)			((x >= 0) ? (x) : -(x))*/
+
+
 #ifdef __cplusplus
 }
 #endif

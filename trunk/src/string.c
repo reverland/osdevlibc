@@ -58,8 +58,7 @@ void* memmove(void* destination, const void* source, size_t num) {
 }
 
 char* strcpy(char* destination, const char* source) {
-	memcpy(destination, source, strlen(source) + 1);
-	return destination;
+	return memcpy(destination, source, strlen(source) + 1);
 }
 
 char* strncpy(char* destination, const char* source, size_t n) {
