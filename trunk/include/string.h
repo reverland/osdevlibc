@@ -21,6 +21,10 @@
 
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void*	memcpy	(void* s1, const void* s2, size_t n);
 void*	memmove	(void* s1, const void* s2, size_t n);
 char*	strcpy	(char* s1, const char* s2);
@@ -46,5 +50,10 @@ size_t	strlen		(const char* s)							__attribute__((pure));
 //#define	strcpy(d, s) 				((char*)memcpy(d, s, strlen(s) + 1))
 #define	strncmp(s1, s2, n)			memcmp(s1, s2, n)
 //#define	strchr(s, c)					((char*)memchr(s, c, strlen(s) + 1))
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
