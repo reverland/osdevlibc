@@ -47,16 +47,12 @@ void*	memset	(void* s, int c, size_t n);
 size_t	strlen		(const char* s)							__attribute__((pure));
 
 
-// macros for optimization
-#ifdef _TARGET_X86_
-//#define	memcpy(d,s,n)				({ void* _d = (d); const void* _s = (s); size_t _n = (n); asm("cld ; rep movsb" :: "S"(_s), "D"(_d), "c"((size_t)_n) : "flags", "memory"); _d; })
-//#define	memmove(d,s,n)				({ void* _d = (d); const void* _s = (s); size_t _n = (n); if (_d < _s) asm("cld ; rep movsb" :: "S"(_s), "D"(_d), "c"((size_t)_n) : "flags", "memory"); else asm("std; rep movsb" :: "S"((char*)_s + _n - 1), "D"((char*)_d + (_n) - 1), "c"((size_t)_n) : "flags", "memory"); _d; })
-//#define	memset(d,v,n)				({ void* _d = (d); size_t _n = (n); asm("cld ; rep stosb" :: "a"(v), "D"(_d), "c"((size_t)_n) : "flags", "memory"); _d; })
+#ifdef __GNUC__
+#define	strcpy(d, s) 				({ const char* _s = (s); char* _d = (d); (char*)memcpy(_d, _s, strlen(_s) + 1); })
+#define	strchr(s, c)					({ const char* _s = s; (char*)memchr(_s, c, strlen(_s) + 1); })
 #endif
 
-#define	strcpy(d, s) 				({ const char* _s = (s); char* _d = (d); (char*)memcpy(_d, _s, strlen(_s) + 1); })
 #define	strncmp(s1, s2, n)			memcmp(s1, s2, n)
-#define	strchr(s, c)					({ const char* _s = s; (char*)memchr(_s, c, strlen(_s) + 1); })
 
 
 #ifdef __cplusplus
