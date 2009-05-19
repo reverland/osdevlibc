@@ -19,61 +19,12 @@
 #include <string.h>
 #include <machine/_target.h>
 
-void* memcpy(void* destination, const void* source, size_t num) {
-#ifdef _TARGET_X86_
-	asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
-#else
-	const unsigned char* vsource = (const unsigned char*)source;
-	unsigned char* vdestination = (unsigned char*)destination;
-	while (num >= 1) {
-		*vdestination = *vsource;
-		vsource++; vdestination++; num--;
-	}
-#endif
-	return destination;
-}
-
-void* memmove(void* destination, const void* source, size_t num) {
-#ifdef _TARGET_X86_
-	if (destination < source)
-		asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
-	else
-		asm("std; rep movsb" :: "S"((unsigned char*)source + num - 1), "D"((unsigned char*)destination + num - 1), "c"((long)num) : "flags", "memory");
-#else
-	const unsigned char* sp;
-	unsigned char* dp;
-	if (destination < source) {
-		sp = (const unsigned char*)source; dp = (unsigned char*)destination;
-		while (num) { *dp = *sp; dp++; sp++; num--; }
-	} else {
-		while (num) {
-			sp = (unsigned char*)source + num - 1;
-			dp = (unsigned char*)destination + num - 1;
-			*dp = *sp;
-			num--;
-		}
-	}
-#endif
-	return destination;
-}
-
-#undef strcpy
-char* strcpy(char* destination, const char* source) {
-	return memcpy(destination, source, strlen(source) + 1);
-}
-
 char* strncpy(char* destination, const char* source, size_t n) {
 	size_t len = strlen(source) + 1;
 	if (len > n) len = n;
 	memcpy(destination, source, len);
 	if (len < n) memset(destination + len, '\0', n - len);
 	return destination;
-}
-
-#undef strcat
-char* strcat(char* s1, const char* s2) {
-	strcpy(s1 + strlen(s1), s2);
-	return s1;
 }
 
 char* strncat(char* s1, const char* s2, size_t n) {
@@ -111,11 +62,6 @@ int strcmp(const char* str1, const char* str2) {
 	return 0;
 }
 
-#undef strncmp
-int strncmp(const char* s1, const char* s2, size_t n) {
-	return memcmp(s1, s2, n);
-}
-
 void* memchr(const void* ptr, int value, size_t num) {
 	const unsigned char* vptr = (const unsigned char*)ptr;
 	while (num) {
@@ -124,11 +70,6 @@ void* memchr(const void* ptr, int value, size_t num) {
 		vptr++; num--;
 	}
 	return NULL;
-}
-
-#undef strchr
-char* strchr(const char* s, int c) {
-	return memchr(s, c, strlen(s) + 1);
 }
 
 size_t strcspn(const char* s1, const char* s2) {
@@ -213,19 +154,6 @@ char* strtok(char* s1, const char* s2) {
 	return s1;
 }
 
-void* memset(void* ptr, int value, size_t num) {
-#ifdef _TARGET_X86_
-	asm("cld; rep stosb" :: "a"(value), "D"(ptr), "c"((long)num) : "flags", "memory");
-#else
-	unsigned char* vptr = (unsigned char*)ptr;
-	while (num) {
-		*vptr = (unsigned char)value;
-		vptr++; num--;
-	}
-#endif
-	return ptr;
-}
-
 size_t strlen(const char* str) {
 	size_t len = 0;
 #ifdef slmqkdqsdfjklqsdg //_TARGET_X86_
@@ -236,5 +164,65 @@ size_t strlen(const char* str) {
 	while (*str != '\0') { str++; len++; }
 #endif
 	return len;
+}
+
+#undef strcat
+char* strcat(char* s1, const char* s2) {
+	strcpy(s1 + strlen(s1), s2);
+	return s1;
+}
+
+#undef strncmp
+int strncmp(const char* s1, const char* s2, size_t n) {
+	return memcmp(s1, s2, n);
+}
+
+#undef strcpy
+char* strcpy(char* destination, const char* source) {
+	return memcpy(destination, source, strlen(source) + 1);
+}
+
+#undef strchr
+char* strchr(const char* s, int c) {
+	return memchr(s, c, strlen(s) + 1);
+}
+
+#undef memset
+void* memset(void* ptr, int value, size_t num) {
+	unsigned char* vptr = (unsigned char*)ptr;
+	while (num) {
+		*vptr = (unsigned char)value;
+		vptr++; num--;
+	}
+	return ptr;
+}
+
+#undef memcpy
+void* memcpy(void* destination, const void* source, size_t num) {
+	const unsigned char* vsource = (const unsigned char*)source;
+	unsigned char* vdestination = (unsigned char*)destination;
+	while (num >= 1) {
+		*vdestination = *vsource;
+		vsource++; vdestination++; num--;
+	}
+	return destination;
+}
+
+#undef memmove
+void* memmove(void* destination, const void* source, size_t num) {
+	const unsigned char* sp;
+	unsigned char* dp;
+	if (destination < source) {
+		sp = (const unsigned char*)source; dp = (unsigned char*)destination;
+		while (num) { *dp = *sp; dp++; sp++; num--; }
+	} else {
+		while (num) {
+			sp = (unsigned char*)source + num - 1;
+			dp = (unsigned char*)destination + num - 1;
+			*dp = *sp;
+			num--;
+		}
+	}
+	return destination;
 }
 
