@@ -106,7 +106,7 @@ typedef char					int64_t;
 typedef unsigned char			uint64_t;
 typedef int64_t					int_least64_t;
 typedef uint64_t					uint_least64_t;
-#if	__CHAR_BIT__ * __SIZEOF_SHORT__ == 64
+#elif	__CHAR_BIT__ * __SIZEOF_SHORT__ == 64
 typedef short					int64_t;
 typedef unsigned short			uint64_t;
 typedef int64_t					int_least64_t;
