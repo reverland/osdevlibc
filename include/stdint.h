@@ -22,6 +22,10 @@
 #include <machine/_types.h>
 
 
+#if	__CHAR_BIT__ == 8
+typedef char					int8_t;
+typedef unsigned char			uint8_t;
+#endif
 #if	__CHAR_BIT__ >= 8
 typedef char					int_least8_t;
 typedef unsigned char			uint_least8_t;
