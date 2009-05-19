@@ -26,6 +26,7 @@
 typedef char					int8_t;
 typedef unsigned char			uint8_t;
 #endif
+
 #if	__CHAR_BIT__ >= 8
 typedef char					int_least8_t;
 typedef unsigned char			uint_least8_t;
@@ -34,7 +35,12 @@ typedef unsigned char			uint_least8_t;
 #endif
 
 
-#if	__CHAR_BIT__ * __SIZEOF_SHORT__ == 16
+#if	__CHAR_BIT__ == 16
+typedef char					int16_t;
+typedef unsigned char			uint16_t;
+typedef int16_t					int_least16_t;
+typedef uint16_t					uint_least16_t;
+#elif	__CHAR_BIT__ * __SIZEOF_SHORT__ == 16
 typedef short					int16_t;
 typedef unsigned short			uint16_t;
 typedef int16_t					int_least16_t;
@@ -62,7 +68,12 @@ typedef unsigned long long		uint_least16_t;
 #endif
 
 
-#if	__CHAR_BIT__ * __SIZEOF_SHORT__ == 32
+#if	__CHAR_BIT__ == 32
+typedef char					int32_t;
+typedef unsigned char			uint32_t;
+typedef int32_t					int_least32_t;
+typedef uint32_t					uint_least32_t;
+#elif	__CHAR_BIT__ * __SIZEOF_SHORT__ == 32
 typedef short					int32_t;
 typedef unsigned short			uint32_t;
 typedef int32_t					int_least32_t;
@@ -90,6 +101,11 @@ typedef unsigned long long		uint_least32_t;
 #endif
 
 
+#if	__CHAR_BIT__ == 64
+typedef char					int64_t;
+typedef unsigned char			uint64_t;
+typedef int64_t					int_least64_t;
+typedef uint64_t					uint_least64_t;
 #if	__CHAR_BIT__ * __SIZEOF_SHORT__ == 64
 typedef short					int64_t;
 typedef unsigned short			uint64_t;
