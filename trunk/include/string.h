@@ -48,13 +48,30 @@ size_t	strlen		(const char* s)							__attribute__((pure));
 
 
 #ifdef __GNUC__
-#define	memcpy(d,s,n)				__builtin_memcpy((d),(s),(n))
-#define	memset(d,v,n)				__builtin_memset((d),(v),(n))
-#define	strcpy(d, s) 				({ const char* _s = (s); char* _d = (d); (char*)memcpy(_d, _s, strlen(_s) + 1); })
-#define	strchr(s, c)					({ const char* _s = s; (char*)memchr(_s, c, strlen(_s) + 1); })
+/* GCC has builtin functions which have two possible effects:
+*    - either they are optimized (eg. __builtin_strlen("hello") could be replaced by 5)
+*    - or they simply call the corresponding function (eg. __builtin_memcpy could simply be a call to memcpy)
+*/
+#define	memcpy(d,s,n)				__builtin_memcpy(d,s,n)
+#define	strcpy(d,s) 				__builtin_strcpy(d,s)
+#define	strncpy(d,s,n)				__builtin_strncpy(d,s,n);
+#define	strcat(d,s)					__builtin_strcat(d,s)
+#define	strncat(d,s,n)				__builtin_strncat(d,s,n)
+#define	memcmp(a,b,n)				__builtin_memcmp(a,b,n)
+#define	strcmp(a,b)				__builtin_strcmp(a,b)
+#define	strncmp(a,b,n)				__builtin_strncmp(a,b,n)
+#define	memchr(s,c,n)				__builtin_memchr(s,c,n)
+#define	strchr(s,c)					__builtin_strchr(s,c)
+#define	strcspn(a,b)				__builtin_strcspn(a,b)
+#define	strpbrk(a,b)				__builtin_strpbrk(a,b)
+#define	strrchr(s,c)					__builtin_strrchr(s,c)
+#define	strspn(a,b)					__builtin_strspn(a,b)
+#define	strstr(a,b)					__builtin_strstr(a,b)
+#define	strtok(d,s)					__builtin_strtok(d,s)
+#define	memset(s,c,n)				__builtin_memset(s,c,n)
+#define	strlen(s)					__builtin_strlen(s)
 #endif
 
-#define	strncmp(s1, s2, n)			memcmp(s1, s2, n)
 
 
 #ifdef __cplusplus
