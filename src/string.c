@@ -37,6 +37,7 @@ void* memcpy(void* destination, const void* source, size_t num) {
 	return destination;
 }
 
+#undef memmove
 void* memmove(void* destination, const void* source, size_t num) {
 #ifdef _TARGET_X86_
 	if (destination < source)
@@ -66,51 +67,7 @@ char* strcpy(char* destination, const char* source) {
 	return memcpy(destination, source, strlen(source) + 1);
 }
 
-void* memcpy(void* destination, const void* source, size_t num) {
-#ifdef _TARGET_X86_
-	asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
-#else
-	const unsigned char* vsource = (const unsigned char*)source;
-	unsigned char* vdestination = (unsigned char*)destination;
-	while (num >= 1) {
-		*vdestination = *vsource;
-		vsource++; vdestination++; num--;
-	}
-#endif
-	return destination;
-}
-
-void* memmove(void* destination, const void* source, size_t num) {
-#ifdef _TARGET_X86_
-	if (destination < source)
-		asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
-	else
-		asm("std; rep movsb" :: "S"((unsigned char*)source + num - 1), "D"((unsigned char*)destination + num - 1), "c"((long)num) : "flags", "memory");
-#else
-	const unsigned char* sp;
-	unsigned char* dp;
-	if (destination < source) {
-		sp = (const unsigned char*)source; dp = (unsigned char*)destination;
-		while (num) { *dp = *sp; dp++; sp++; num--; }
-	} else {
-		while (num) {
-			sp = (unsigned char*)source + num - 1;
-			dp = (unsigned char*)destination + num - 1;
-			*dp = *sp;
-			num--;
-		}
-	}
-#endif
-	return destination;
-}
-
-#define _strcpy	strcpy
-#undef strcpy
-char* strcpy(char* destination, const char* source) {
-#define strcpy	_strcpy
-	return memcpy(destination, source, strlen(source) + 1);
-}
-
+#undef strncpy
 char* strncpy(char* destination, const char* source, size_t n) {
 	size_t len = strlen(source) + 1;
 	if (len > n) len = n;
@@ -119,11 +76,13 @@ char* strncpy(char* destination, const char* source, size_t n) {
 	return destination;
 }
 
+#undef strcat
 char* strcat(char* s1, const char* s2) {
 	strcpy(s1 + strlen(s1), s2);
 	return s1;
 }
 
+#undef strncat
 char* strncat(char* s1, const char* s2, size_t n) {
 	size_t n2 = strlen(s2);
 	if (n2 > n) n2 = n;
@@ -132,6 +91,7 @@ char* strncat(char* s1, const char* s2, size_t n) {
 	return s1;
 }
 
+#undef memcmp
 int memcmp(const void* ptr1, const void* ptr2, size_t num) {
 	const unsigned char* vptr1 = (const unsigned char*)ptr1;
 	const unsigned char* vptr2 = (const unsigned char*)ptr2;
@@ -143,6 +103,7 @@ int memcmp(const void* ptr1, const void* ptr2, size_t num) {
 	return 0;
 }
 
+#undef strcmp
 int strcmp(const char* str1, const char* str2) {
 	size_t len1 = strlen(str1);
 	size_t len2 = strlen(str2);
@@ -164,13 +125,7 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 	return memcmp(s1, s2, n);
 }
 
-#define _strncmp strncmp
-#undef strncmp
-int strncmp(const char* s1, const char* s2, size_t n) {
-#define strncmp _strncmp
-	return memcmp(s1, s2, n);
-}
-
+#undef memchr
 void* memchr(const void* ptr, int value, size_t num) {
 	const unsigned char* vptr = (const unsigned char*)ptr;
 	while (num) {
@@ -186,13 +141,7 @@ char* strchr(const char* s, int c) {
 	return memchr(s, c, strlen(s) + 1);
 }
 
-#define _strchr strchr
-#undef strchr
-char* strchr(const char* s, int c) {
-#define strchr _strchr
-	return memchr(s, c, strlen(s) + 1);
-}
-
+#undef strcspn
 size_t strcspn(const char* s1, const char* s2) {
 	char* pbrk = strpbrk(s1, s2);
 	if (pbrk == NULL)
@@ -200,6 +149,7 @@ size_t strcspn(const char* s1, const char* s2) {
 	return (size_t)(pbrk - s1);
 }
 
+#undef strpbrk
 char* strpbrk(const char* s1, const char* s2) {
 	int s2len = strlen(s2);
 	for (; *s1 != '\0'; s1++) {
@@ -211,6 +161,7 @@ char* strpbrk(const char* s1, const char* s2) {
 	return NULL;
 }
 
+#undef strrchr
 char* strrchr(const char* str, int character) {
 	int i = strlen(str);
 	for (; i >= 0; i--)
@@ -219,6 +170,7 @@ char* strrchr(const char* str, int character) {
 	return NULL;
 }
 
+#undef strspn
 size_t strspn(const char* s1, const char* s2) {
 	int found = 0;
 	size_t len = 0;
@@ -235,6 +187,7 @@ size_t strspn(const char* s1, const char* s2) {
 	return len;
 }
 
+#undef strstr
 char* strstr(const char* s1, const char* s2) {
 	size_t s2len = strlen(s2);
 	for (; *s1 != '\0'; s1++) {
@@ -250,6 +203,7 @@ char* strstr(const char* s1, const char* s2) {
 	return NULL;
 }
 
+#undef strtok
 char* strtok(char* s1, const char* s2) {
 	static char* prevS1;
 	if (s1 == NULL) {
@@ -294,6 +248,7 @@ void* memset(void* ptr, int value, size_t num) {
 	return ptr;
 }
 
+#undef strlen
 size_t strlen(const char* str) {
 	size_t len = 0;
 #if 0 && defined(__GNUC__) && defined(_TARGET_X86_)
@@ -306,28 +261,4 @@ size_t strlen(const char* str) {
 	return len;
 }
 
-void* memset(void* ptr, int value, size_t num) {
-#ifdef _TARGET_X86_
-	asm("cld; rep stosb" :: "a"(value), "D"(ptr), "c"((long)num) : "flags", "memory");
-#else
-	unsigned char* vptr = (unsigned char*)ptr;
-	while (num) {
-		*vptr = (unsigned char)value;
-		vptr++; num--;
-	}
-#endif
-	return ptr;
-}
-
-size_t strlen(const char* str) {
-	size_t len = 0;
-#ifdef slmqkdqsdfjklqsdg //_TARGET_X86_
-	const char* endPtr;
-	asm("cld ; repnz scasb" : "=D"(endPtr) : "0"(str), "a"(0) : "flags", "%edi");
-	len = (endPtr - str) - 1;
-#else
-	while (*str != '\0') { str++; len++; }
-#endif
-	return len;
-}
 
