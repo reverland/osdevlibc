@@ -19,6 +19,55 @@
 #include <string.h>
 #include <machine/_target.h>
 
+<<<<<<< .mine
+#undef memcpy
+void* memcpy(void* destination, const void* source, size_t num) {
+#if defined(__GNUC__) && defined(_TARGET_X86_)
+	if ((num % 4) == 0)
+		asm volatile("cld ; rep movsl" :: "S"(source), "D"(destination), "c"(num / 4) : "cc", "memory");
+	else
+		asm volatile("cld ; rep movsb" :: "S"(source), "D"(destination), "c"(num) : "cc", "memory");
+#else
+	const unsigned char* vsource = (const unsigned char*)source;
+	unsigned char* vdestination = (unsigned char*)destination;
+	while (num >= 1) {
+		*vdestination = *vsource;
+		vsource++; vdestination++; num--;
+	}
+#endif
+	return destination;
+}
+
+void* memmove(void* destination, const void* source, size_t num) {
+#ifdef _TARGET_X86_
+	if (destination < source)
+		asm volatile("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "cc", "memory");
+	else
+		asm volatile("std; rep movsb; cld" :: "S"((unsigned char*)source + num - 1), "D"((unsigned char*)destination + num - 1), "c"((long)num) : "cc", "memory");
+#else
+	const unsigned char* sp;
+	unsigned char* dp;
+	if (destination < source) {
+		sp = (const unsigned char*)source; dp = (unsigned char*)destination;
+		while (num) { *dp = *sp; dp++; sp++; num--; }
+	} else {
+		while (num) {
+			sp = (unsigned char*)source + num - 1;
+			dp = (unsigned char*)destination + num - 1;
+			*dp = *sp;
+			num--;
+		}
+	}
+#endif
+	return destination;
+}
+
+#undef strcpy
+char* strcpy(char* destination, const char* source) {
+	return memcpy(destination, source, strlen(source) + 1);
+}
+
+=======
 void* memcpy(void* destination, const void* source, size_t num) {
 #ifdef _TARGET_X86_
 	asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
@@ -64,6 +113,7 @@ char* strcpy(char* destination, const char* source) {
 	return memcpy(destination, source, strlen(source) + 1);
 }
 
+>>>>>>> .r29
 char* strncpy(char* destination, const char* source, size_t n) {
 	size_t len = strlen(source) + 1;
 	if (len > n) len = n;
@@ -112,6 +162,13 @@ int strcmp(const char* str1, const char* str2) {
 	return 0;
 }
 
+<<<<<<< .mine
+#undef strncmp
+int strncmp(const char* s1, const char* s2, size_t n) {
+	return memcmp(s1, s2, n);
+}
+
+=======
 #define _strncmp strncmp
 #undef strncmp
 int strncmp(const char* s1, const char* s2, size_t n) {
@@ -119,6 +176,7 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 	return memcmp(s1, s2, n);
 }
 
+>>>>>>> .r29
 void* memchr(const void* ptr, int value, size_t num) {
 	const unsigned char* vptr = (const unsigned char*)ptr;
 	while (num) {
@@ -129,6 +187,13 @@ void* memchr(const void* ptr, int value, size_t num) {
 	return NULL;
 }
 
+<<<<<<< .mine
+#undef strchr
+char* strchr(const char* s, int c) {
+	return memchr(s, c, strlen(s) + 1);
+}
+
+=======
 #define _strchr strchr
 #undef strchr
 char* strchr(const char* s, int c) {
@@ -136,6 +201,7 @@ char* strchr(const char* s, int c) {
 	return memchr(s, c, strlen(s) + 1);
 }
 
+>>>>>>> .r29
 size_t strcspn(const char* s1, const char* s2) {
 	char* pbrk = strpbrk(s1, s2);
 	if (pbrk == NULL)
@@ -218,6 +284,39 @@ char* strtok(char* s1, const char* s2) {
 	return s1;
 }
 
+<<<<<<< .mine
+#undef memset
+void* memset(void* ptr, int value, size_t num) {
+#if defined(__GNUC__) && defined(_TARGET_X86_)
+	if ((num % 4) == 0) {
+		value = value & 0xff;
+		value = (value << 24) | (value << 16) | (value << 8) | value;
+		asm volatile("cld ; rep stosl" :: "a"(value), "D"(ptr), "c"(num / 4) : "cc", "memory");
+	} else
+		asm volatile("cld ; rep stosb" : : "a"(value), "D"(ptr), "c"(num) : "cc", "memory");
+#else
+	unsigned char* vptr = (unsigned char*)ptr;
+	while (num) {
+		*vptr = (unsigned char)value;
+		vptr++; num--;
+	}
+#endif
+	return ptr;
+}
+
+size_t strlen(const char* str) {
+	size_t len = 0;
+#if 0 && defined(__GNUC__) && defined(_TARGET_X86_)
+	const char* endPtr;
+	asm("cld ; repnz scasb" : "=D"(endPtr) : "0"(str), "a"(0) : "cc", "%edi");
+	len = (endPtr - str) - 1;
+#else
+	while (*str != '\0') { str++; len++; }
+#endif
+	return len;
+}
+
+=======
 void* memset(void* ptr, int value, size_t num) {
 #ifdef _TARGET_X86_
 	asm("cld; rep stosb" :: "a"(value), "D"(ptr), "c"((long)num) : "flags", "memory");
@@ -243,3 +342,4 @@ size_t strlen(const char* str) {
 	return len;
 }
 
+>>>>>>> .r29
