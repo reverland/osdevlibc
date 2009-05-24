@@ -19,7 +19,6 @@
 #include <string.h>
 #include <machine/_target.h>
 
-<<<<<<< .mine
 #undef memcpy
 void* memcpy(void* destination, const void* source, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
@@ -67,7 +66,6 @@ char* strcpy(char* destination, const char* source) {
 	return memcpy(destination, source, strlen(source) + 1);
 }
 
-=======
 void* memcpy(void* destination, const void* source, size_t num) {
 #ifdef _TARGET_X86_
 	asm("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "flags", "memory");
@@ -113,7 +111,6 @@ char* strcpy(char* destination, const char* source) {
 	return memcpy(destination, source, strlen(source) + 1);
 }
 
->>>>>>> .r29
 char* strncpy(char* destination, const char* source, size_t n) {
 	size_t len = strlen(source) + 1;
 	if (len > n) len = n;
@@ -162,13 +159,11 @@ int strcmp(const char* str1, const char* str2) {
 	return 0;
 }
 
-<<<<<<< .mine
 #undef strncmp
 int strncmp(const char* s1, const char* s2, size_t n) {
 	return memcmp(s1, s2, n);
 }
 
-=======
 #define _strncmp strncmp
 #undef strncmp
 int strncmp(const char* s1, const char* s2, size_t n) {
@@ -176,7 +171,6 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 	return memcmp(s1, s2, n);
 }
 
->>>>>>> .r29
 void* memchr(const void* ptr, int value, size_t num) {
 	const unsigned char* vptr = (const unsigned char*)ptr;
 	while (num) {
@@ -187,13 +181,11 @@ void* memchr(const void* ptr, int value, size_t num) {
 	return NULL;
 }
 
-<<<<<<< .mine
 #undef strchr
 char* strchr(const char* s, int c) {
 	return memchr(s, c, strlen(s) + 1);
 }
 
-=======
 #define _strchr strchr
 #undef strchr
 char* strchr(const char* s, int c) {
@@ -201,7 +193,6 @@ char* strchr(const char* s, int c) {
 	return memchr(s, c, strlen(s) + 1);
 }
 
->>>>>>> .r29
 size_t strcspn(const char* s1, const char* s2) {
 	char* pbrk = strpbrk(s1, s2);
 	if (pbrk == NULL)
@@ -284,7 +275,6 @@ char* strtok(char* s1, const char* s2) {
 	return s1;
 }
 
-<<<<<<< .mine
 #undef memset
 void* memset(void* ptr, int value, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
@@ -316,7 +306,6 @@ size_t strlen(const char* str) {
 	return len;
 }
 
-=======
 void* memset(void* ptr, int value, size_t num) {
 #ifdef _TARGET_X86_
 	asm("cld; rep stosb" :: "a"(value), "D"(ptr), "c"((long)num) : "flags", "memory");
@@ -342,4 +331,3 @@ size_t strlen(const char* str) {
 	return len;
 }
 
->>>>>>> .r29
