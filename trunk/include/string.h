@@ -48,6 +48,8 @@ size_t	strlen		(const char* s)							__attribute__((pure));
 
 
 #ifdef __GNUC__
+#define	memcpy(d,s,n)				__builtin_memcpy((d),(s),(n))
+#define	memset(d,v,n)				__builtin_memset((d),(v),(n))
 #define	strcpy(d, s) 				({ const char* _s = (s); char* _d = (d); (char*)memcpy(_d, _s, strlen(_s) + 1); })
 #define	strchr(s, c)					({ const char* _s = s; (char*)memchr(_s, c, strlen(_s) + 1); })
 #endif
