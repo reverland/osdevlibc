@@ -3,15 +3,13 @@
 
 #ifdef _TARGET_X86_
 double cos(double x) {
-	double result = x;
-	asm("fcos" : "=t"(result) : "0"(x));
-	return result;
+	asm("fcos" : "+t"(x));
+	return x;
 }
 
 double sin(double x) {
-	double result;
-	asm("fsin" : "=t"(result) : "0"(x));
-	return result;
+	asm("fsin" : "+t"(x));
+	return x;
 }
 #endif
 

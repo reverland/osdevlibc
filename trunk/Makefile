@@ -1,5 +1,5 @@
 BINARY=bin/libc.a
-OBJS=build/stdio.o build/stdlib.o build/string.o
+OBJS=build/stdio.o build/stdlib.o build/string.o build/math.o
 
 all : $(BINARY)
 	
