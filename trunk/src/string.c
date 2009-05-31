@@ -22,12 +22,8 @@
 #undef memcpy
 void* memcpy(void* destination, const void* source, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
-	if ((num % 4) == 0)
-		asm volatile("cld ; rep movsl" :: "S"(source), "D"(destination), "c"(num / 4) : "cc", "memory");
-	else if ((num % 2) == 0)
-		asm volatile("cld ; rep movsw" :: "S"(source), "D"(destination), "c"(num / 2) : "cc", "memory");
-	else
-		asm volatile("cld ; rep movsb" :: "S"(source), "D"(destination), "c"(num) : "cc", "memory");
+	void* temporaryDestination = destination;
+	asm volatile("cld ; rep movsl ; mov %3, %2 ; rep movsb" : "+S"(source), "+D"(temporaryDestination) : "c"(num / 4), "r"(num % 4) : "cc", "memory");
 #else
 	const unsigned char* vsource = (const unsigned char*)source;
 	unsigned char* vdestination = (unsigned char*)destination;
@@ -234,12 +230,18 @@ char* strtok(char* s1, const char* s2) {
 #undef memset
 void* memset(void* ptr, int value, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
-	if ((num % 4) == 0) {
-		value = value & 0xff;
-		value = (value << 24) | (value << 16) | (value << 8) | value;
-		asm volatile("cld ; rep stosl" :: "a"(value), "D"(ptr), "c"(num / 4) : "cc", "memory");
-	} else
-		asm volatile("cld ; rep stosb" : : "a"(value), "D"(ptr), "c"(num) : "cc", "memory");
+	// 'stosl' will use the value in eax but we only want the value in al
+	// so we make eax = al << 24 | al << 16 | al << 8 | al
+	if ((value & 0xff) == 0)
+		// this is a little optimization because memset is most often called with value = 0
+		value = 0;
+	else {
+		value = (value & 0xff) | ((value & 0xff) << 8);
+		value = (value & 0xffff) | ((value & 0xffff) << 16);
+	}
+	
+	void* temporaryPtr = ptr;
+	asm volatile("cld ; rep stosl ; mov %3, %2 ; rep stosb" : "+D"(temporaryPtr) : "a"(value), "c"(num / 4), "r"(num % 4) : "cc", "memory");
 #else
 	unsigned char* vptr = (unsigned char*)ptr;
 	while (num) {
@@ -253,14 +255,12 @@ void* memset(void* ptr, int value, size_t num) {
 #undef strlen
 size_t strlen(const char* str) {
 	size_t len = 0;
-#if 0 && defined(__GNUC__) && defined(_TARGET_X86_)
-	const char* endPtr;
-	asm("cld ; repnz scasb" : "=D"(endPtr) : "0"(str), "a"(0) : "cc", "%edi");
+#if defined(__GNUC__) && defined(_TARGET_X86_)
+	const char* endPtr = str;
+	asm("cld ; repne scasb" : "+D"(endPtr) : "a"(0), "c"(~0) : "cc");
 	len = (endPtr - str) - 1;
 #else
 	while (*str != '\0') { str++; len++; }
 #endif
 	return len;
 }
-
-
