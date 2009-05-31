@@ -24,6 +24,8 @@ void* memcpy(void* destination, const void* source, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
 	if ((num % 4) == 0)
 		asm volatile("cld ; rep movsl" :: "S"(source), "D"(destination), "c"(num / 4) : "cc", "memory");
+	else if ((num % 2) == 0)
+		asm volatile("cld ; rep movsw" :: "S"(source), "D"(destination), "c"(num / 2) : "cc", "memory");
 	else
 		asm volatile("cld ; rep movsb" :: "S"(source), "D"(destination), "c"(num) : "cc", "memory");
 #else
