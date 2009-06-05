@@ -1,10 +1,8 @@
 #summary List of functions and data types which will never be implemented
 #labels Phase-Implementation,Phase-Support
 
-Some functions require some support to work.
-In a real C standard library, these functions would use o/s-specific system calls. Since we are in a freestanding environnement, this is not possible.
-
-If you want to use these functions, I recommend you implementing them and appending them to this code.
+Some functions require some support to work, like printf, fopen, etc.
+In a real C standard library, these functions would use O/S-specific system calls. Since we are in a freestanding environnement, this is not possible.
 
 *Headers not listed here are fully implemented.*
 
@@ -86,10 +84,6 @@ If you want to use these functions, I recommend you implementing them and append
  * system
 
 
-=== stddef.h ===
- * wchar_t
-
-
 === string.h ===
  * strcoll
  * strxfrm
@@ -97,10 +91,5 @@ If you want to use these functions, I recommend you implementing them and append
 
 
 === time.h ===
-
-_Nothing will be implemented_
-
-
-=== wchar.h ===
 
 _Nothing will be implemented_
