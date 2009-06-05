@@ -19,7 +19,7 @@
 #ifndef _STDC_STDINT_H_
 #define _STDC_STDINT_H_
 
-#include <machine/_types.h>
+#include <machine/_sizes.h>
 
 
 #if	__CHAR_BIT__ == 8

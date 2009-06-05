@@ -23,7 +23,19 @@
 extern "C" {
 #endif
 
-//TODO: 7.12.3 and less
+// TODO: 7.12.1 and 7.12.2
+	
+#ifdef __GNUC__
+#define			fpclassify(x)			__builtin_fpclassify(x)
+#define			isfinite(x)				__builtin_isfinite(x)
+#define			isinf(x)				__builtin_isinf(x)
+#define			isnan(x)				__builtin_isnan(x)
+#define			isnormal(x)				__builtin_isnormal(x)
+#define			signbit(x)				(isnan(x) ? 0 : ((x) < 0))
+#else
+// TODO:
+#warning For the moment no floating-point macros supported without GCC
+#endif
 
 double			acos(double x);
 float				acosf(float x);
@@ -100,8 +112,119 @@ long double		logbl(long double x);
 double			modf(double value, double* iptr);
 float				modff(float value, float* iptr);
 long double		modfl(long double value, long double* iptr);
+double			scalbn(double x, int n);
+float				scalbnf(float x, int n);
+long double		scalbnl(long double x, int n);
+double			scalbln(double x, long int n);
+float				scalblnf(float x, long int n);
+long double		scalblnl(long double x, long int n);
+double			cbrt(double x);
+float				cbrtf(float x);
+long double		cbrtl(long double x);
+double			fabs(double x);
+float				fabsf(float x);
+long double		fabsl(long double x);
+double			hypot(double x, double y);
+float				hypotf(float x, float y);
+long double		hypotl(long double x, long double y);
+double			pow(double x, double y);
+float				powf(float x, float y);
+long double		powl(long double x, long double y);
+double			sqrt(double x);
+float				sqrtf(float x);
+long double		sqrtl(long double x);
+double			erf(double x);
+float				erff(float x);
+long double		erfl(long double x);
+double			erfc(double x);
+float				erfcf(float x);
+long double		erfcl(long double x);
+double			lgamma(double x);
+float				lgammaf(float x);
+long double		lgammal(long double x);
+double			tgamma(double x);
+float				tgammaf(float x);
+long double		tgammal(long double x);
+double			ceil(double x);
+float				ceilf(float x);
+long double		ceill(long double x);
+double			floor(double x);
+float				floorf(float x);
+long double		floorl(long double x);
+double			nearbyint(double x);
+float				nearbyintf(float x);
+long double		nearbyintl(long double x);
+double			rint(double x);
+float				rintf(float x);
+long double		rintl(long double x);
+long int			lrint(double x);
+long int			lrintf(float x);
+long int			lrintl(long double x);
+long long int		llrint(double x);
+long long int		llrintf(float x);
+long long int		llrintl(long double x);
+double			round(double x);
+float				roundf(float x);
+long double		roundl(long double x);
+long int			lround(double x);
+long int			lroundf(float x);
+long int			lroundl(long double x);
+long long int		llround(double x);
+long long int		llroundf(float x);
+long long int		llroundl(long double x);
+double			trunc(double x);
+float				truncf(float x);
+long double		truncl(long double x);
+double			fmod(double x, double y);
+float				fmodf(float x, float y);
+long double		fmodl(long double x, long double y);
+double			remainer(double x, double y);
+float				remainerf(float x, float y);
+long double		remainerl(long double x, long double y);
+double			remquo(double x, double y, int* quo);
+float				remquof(float x, float y, int* quo);
+long double		remquol(long double x, long double y, int* quo);
+double			copysign(double x, double y);
+float				copysignf(float x, float y);
+long double		copysignl(long double x, long double y);
+double			nan(const char* tagp);
+float				nanf(const char* tagp);
+long double		nanl(const char* tagp);
+double			nextafter(double x, double y);
+float				nextafterf(float x, float y);
+long double		nextafterl(long double x, long double y);
+double			nexttoward(double x, long double y);
+float				nexttowardf(float x, long double y);
+long double		nexttowardl(long double x, long double y);
+double			fdim(double x, double y);
+float				fdimf(float x, float y);
+long double		fdiml(long double x, long double y);
+double			fmax(double x, double y);
+float				fmaxf(float x, float y);
+long double		fmaxl(long double x, long double y);
+double			fmin(double x, double y);
+float				fminf(float x, float y);
+long double		fminl(long double x, long double y);
+double			fma(double x, double y, double z);
+float				fmaf(float x, float y, float z);
+long double		fmal(long double x, long double y, long double z);
 
-//TODO: 7.12.7+
+#ifdef __GNUC__
+#define			isgreater(x,y)			__builtin_isgreater(x,y)
+#define			isgreaterequal(x,y)		__builtin_isgreaterequal(x,y)
+#define			isless(x,y)				__builtin_isless(x,y)
+#define			islessequal(x,y)			__builtin_islessequal(x,y)
+#define			islessgreater(x,y)			__builtin_islessgreater(x,y)
+#define			isunordered(x,y)			__builtin_isunordered(x,y)
+#else
+#define			isgreater(x,y)			(isnan(x) ? y : (isnan(y) ? x : ((x) > (y))))
+#define			isgreaterequal(x,y)		(isnan(x) ? y : (isnan(y) ? x : ((x) >= (y))))
+#define			isless(x,y)				(isnan(x) ? y : (isnan(y) ? x : ((x) < (y))))
+#define			islessequal(x,y)			(isnan(x) ? y : (isnan(y) ? x : ((x) <= (y))))
+#define			islessgreater(x,y)			(isnan(x) ? y : (isnan(y) ? x : ((x) < (y) || (x) > (y))))
+#define			isunordered(x,y)			((isnan(x) || isnan(y)) ? 1 : 0)
+#endif
+
 
 #ifdef __cplusplus
 }
