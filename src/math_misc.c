@@ -165,19 +165,31 @@ long double		fmodl(long double x, long double y);
 
 double remainer(double x, double y) {
 	double result;
+#ifdef _TARGET_X86_
 	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+#else
+#warning remainer function not supported for this platform
+#endif
 	return result;
 }
 
 float remainerf(float x, float y) {
 	float result;
+#ifdef _TARGET_X86_
 	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+#else
+#warning remainerf function not supported for this platform
+#endif
 	return result;
 }
 
 long double remainerl(long double x, long double y) {
 	long double result;
+#ifdef _TARGET_X86_
 	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+#else
+#warning remainerl function not supported for this platform
+#endif
 	return result;
 }
 

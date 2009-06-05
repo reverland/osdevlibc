@@ -21,19 +21,31 @@
 
 double acos(double x) {
 	double pi;
+#ifdef _TARGET_X86_
 	asm("fldpi" : "=t"(pi));
+#else
+	pi = 3.14159265358979;
+#endif
 	return (pi / 2) - asin(x);
 }
 
 float acosf(float x) {
 	float pi;
+#ifdef _TARGET_X86_
 	asm("fldpi" : "=t"(pi));
+#else
+	pi = 3.14159265358979;
+#endif
 	return (pi / 2) - asinf(x);
 }
 
 long double acosl(long double x) {
 	long double pi;
+#ifdef _TARGET_X86_
 	asm("fldpi" : "=t"(pi));
+#else
+	pi = 3.14159265358979;
+#endif
 	return (pi / 2) - asinl(x);
 }
 
