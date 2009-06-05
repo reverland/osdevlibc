@@ -17,6 +17,7 @@
 */
 
 #include <math.h>
+#include <stdint.h>
 #include <machine/_target.h>
 
 double			erf(double x);
@@ -31,15 +32,115 @@ long double		lgammal(long double x);
 double			tgamma(double x);
 float				tgammaf(float x);
 long double		tgammal(long double x);
-double			ceil(double x);
-float				ceilf(float x);
-long double		ceill(long double x);
-double			floor(double x);
-float				floorf(float x);
-long double		floorl(long double x);
-double			nearbyint(double x);
-float				nearbyintf(float x);
-long double		nearbyintl(long double x);
+
+double ceil(double x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x400; controlWord &= ~0x800;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning ceil function not supported for this platform
+#endif
+}
+
+float ceilf(float x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x400; controlWord &= ~0x800;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning ceilf function not supported for this platform
+#endif
+}
+
+long double ceill(long double x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x400; controlWord &= ~0x800;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning ceill function not supported for this platform
+#endif
+}
+
+double floor(double x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x800; controlWord &= ~0x400;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	return nearbyint(x);
+#else
+#warning floor function not supported for this platform
+#endif
+}
+
+float floorf(float x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x800; controlWord &= ~0x400;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	return nearbyintf(x);
+#else
+#warning floorf function not supported for this platform
+#endif
+}
+
+long double floorl(long double x) {
+#ifdef _TARGET_X86_
+	// first we have to modify the CR field in the x87 control register
+	uint_least16_t controlWord;
+	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
+	controlWord |= 0x800; controlWord &= ~0x400;
+	asm volatile("fldcw %0" : : "m"(controlWord));
+	return nearbyintl(x);
+#else
+#warning floorl function not supported for this platform
+#endif
+}
+
+double nearbyint(double x) {
+#ifdef _TARGET_X86_
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning nearbyint function not supported for this platform
+#endif
+}
+
+float nearbyintf(float x) {
+#ifdef _TARGET_X86_
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning nearbyintf function not supported for this platform
+#endif
+}
+
+long double nearbyintl(long double x) {
+#ifdef _TARGET_X86_
+	asm("frndint" : "+t"(x));
+	return x;
+#else
+#warning nearbyintl function not supported for this platform
+#endif
+}
+
 double			rint(double x);
 float				rintf(float x);
 long double		rintl(long double x);
@@ -85,13 +186,40 @@ long double		nexttowardl(long double x, long double y);
 double			fdim(double x, double y);
 float				fdimf(float x, float y);
 long double		fdiml(long double x, long double y);
-double			fmax(double x, double y);
-float				fmaxf(float x, float y);
-long double		fmaxl(long double x, long double y);
-double			fmin(double x, double y);
-float				fminf(float x, float y);
-long double		fminl(long double x, long double y);
-double			fma(double x, double y, double z);
-float				fmaf(float x, float y, float z);
-long double		fmal(long double x, long double y, long double z);
+
+double fmax(double x, double y) {
+	return (x > y) ? x : y;
+}
+
+float fmaxf(float x, float y) {
+	return (x > y) ? x : y;
+}
+
+long double fmaxl(long double x, long double y) {
+	return (x > y) ? x : y;
+}
+
+double fmin(double x, double y) {
+	return (x < y) ? x : y;
+}
+
+float fminf(float x, float y) {
+	return (x < y) ? x : y;
+}
+
+long double fminl(long double x, long double y) {
+	return (x < y) ? x : y;
+}
+
+double fma(double x, double y, double z) {
+	return x * y + z;
+}
+
+float fmaf(float x, float y, float z) {
+	return x * y + z;
+}
+
+long double fmal(long double x, long double y, long double z) {
+	return x * y + z;
+}
 
