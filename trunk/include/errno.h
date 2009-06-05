@@ -19,7 +19,8 @@
 #ifndef _STDC_ERRNO_H_
 #define _STDC_ERRNO_H_
 
-extern int errno;
+#define	errno			*_get_errno()
+int*					_get_errno();
 
 #define EDOM			-1
 #define EILSEQ			-2
