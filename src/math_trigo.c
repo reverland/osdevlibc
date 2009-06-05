@@ -19,49 +19,76 @@
 #include <math.h>
 #include <machine/_target.h>
 
-#define 	PI				3.14159265
+double acos(double x) {
+	double pi;
+	asm("fldpi" : "=t"(pi));
+	return (pi / 2) - asin(x);
+}
 
-double			acos(double x);
-float				acosf(float x);
-long double		acosl(long double x);
-double			asin(double x);
-float				asinf(float x);
-long double		asinl(long double x);
-double			atan(double x);
-float				atanf(float x);
-long double		atanl(long double x);
+float acosf(float x) {
+	float pi;
+	asm("fldpi" : "=t"(pi));
+	return (pi / 2) - asinf(x);
+}
+
+long double acosl(long double x) {
+	long double pi;
+	asm("fldpi" : "=t"(pi));
+	return (pi / 2) - asinl(x);
+}
+
+double asin(double x) {
+	return 2. * atan(x / (1. + sqrt(1. - x * x)));
+}
+
+float asinf(float x) {
+	return 2. * atanf(x / (1. + sqrtf(1. - x * x)));
+}
+
+long double asinl(long double x) {
+	return 2. * atanl(x / (1. + sqrtl(1. - x * x)));
+}
+
+double atan(double x) {
+	return atan2(x, 1.);
+}
+
+float atanf(float x) {
+	return atan2(x, 1.);
+}
+
+long double atanl(long double x) {
+	return atan2(x, 1.);
+}
 
 double atan2(double y, double x) {
-	if (x == 0) {
-		// TODO: use fldpi
-		if (y > 0)			return PI / 2;
-		else if (y < 0)		return -PI / 2;
-		else				;	// TODO: domain error
-	}
-	
-	return atan(y / x);
+#if defined(_TARGET_X86_)
+	double result;
+	asm("fld %1 ; fld %2 ; fpatan" : "=t"(result) : "m"(y), "m"(x));
+	return result;
+#else
+#warning atan2 function not supported for this platform
+#endif
 }
 
 float atan2f(float y, float x) {
-	if (x == 0) {
-		// TODO: use fldpi
-		if (y > 0)			return PI / 2;
-		else if (y < 0)		return -PI / 2;
-		else				;	// TODO: domain error
-	}
-	
-	return atanf(y / x);
+#if defined(_TARGET_X86_)
+	float result;
+	asm("fld %1 ; fld %2 ; fpatan" : "=t"(result) : "m"(y), "m"(x));
+	return result;
+#else
+#warning atan2f function not supported for this platform
+#endif
 }
 
 long double atan2l(long double y, long double x) {
-	if (x == 0) {
-		// TODO: use fldpi
-		if (y > 0)			return PI / 2;
-		else if (y < 0)		return -PI / 2;
-		else				;	// TODO: domain error
-	}
-	
-	return atanl(y / x);
+#if defined(_TARGET_X86_)
+	long double result;
+	asm("fld %1 ; fld %2 ; fpatan" : "=t"(result) : "m"(y), "m"(x));
+	return result;
+#else
+#warning atan2l function not supported for this platform
+#endif
 }
 
 double cos(double x) {
@@ -130,21 +157,74 @@ long double tanl(long double x) {
 	return sinl(x) / cosl(x);
 }
 
-double			acosh(double x);
-float				acoshf(float x);
-long double		acoshl(long double x);
-double			asinh(double x);
-float				asinhf(float x);
-long double		asinhl(long double x);
-double			atanh(double x);
-float				atanhf(float x);
-long double		atanhl(long double x);
-double			cosh(double x);
-float				coshf(float x);
-long double		coshl(long double x);
-double			sinh(double x);
-float				sinhf(float x);
-long double		sinhl(long double x);
-double			tanh(double x);
-float				tanhf(float x);
-long double		tanhl(long double x);
+double acosh(double x) {
+	return log(x + sqrt(x * x - 1));
+}
+
+float acoshf(float x) {
+	return logf(x + sqrtf(x * x - 1));
+}
+
+long double acoshl(long double x) {
+	return logl(x + sqrtl(x * x - 1));
+}
+
+double asinh(double x) {
+	return log(x + sqrt(x * x + 1));
+}
+
+float asinhf(float x) {
+	return logf(x + sqrtf(x * x + 1));
+}
+
+long double asinhl(long double x) {
+	return logl(x + sqrtl(x * x + 1));
+}
+
+double atanh(double x) {
+	return 0.5 * log((1. + x) / (1. - x));
+}
+
+float atanhf(float x) {
+	return 0.5 * logf((1. + x) / (1. - x));
+}
+
+long double atanhl(long double x) {
+	return 0.5 * logl((1. + x) / (1. - x));
+}
+
+double cosh(double x) {
+	return (exp(x) + exp(-x)) / 2;
+}
+
+float coshf(float x) {
+	return (exp(x) + exp(-x)) / 2;
+}
+
+long double coshl(long double x) {
+	return (exp(x) + exp(-x)) / 2;
+}
+
+double sinh(double x) {
+	return (exp(x) - exp(-x)) / 2;
+}
+
+float sinhf(float x) {
+	return (exp(x) - exp(-x)) / 2;
+}
+
+long double sinhl(long double x) {
+	return (exp(x) - exp(-x)) / 2;
+}
+
+double tanh(double x) {
+	return sinh(x) / cosh(x);
+}
+
+float tanhf(float x) {
+	return sinhf(x) / coshf(x);
+}
+
+long double tanhl(long double x) {
+	return sinhl(x) / coshl(x);
+}
