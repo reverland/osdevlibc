@@ -1,4 +1,5 @@
 #include <uchar.h>
+#include <errno.h>
 /*
 size_t mbrtoc16(char16_t* pc16, const char* s, size_t n, mbstate_t* ps) {
 	char32_t ch32;
@@ -42,7 +43,7 @@ size_t mbrtoc32(char32_t* pc32, const char* s, size_t n, mbstate_t* ps) {
 		return 4;
 	}
 	
-	// TODO: errno
+	errno = EILSEQ;
 	return (size_t)-1;
 }
 
@@ -67,6 +68,6 @@ size_t c32rtomb(char* s, char32_t c32, mbstate_t* ps) {
 		return 4;
 	}
 	
-	// TODO: errno update
+	errno = EILSEQ;
 	return (size_t)-1;
 }
