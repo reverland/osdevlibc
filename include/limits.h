@@ -19,7 +19,9 @@
 #ifndef _STDC_LIMITS_H_
 #define _STDC_LIMITS_H_
 
-#define CHAR_BIT		8
+#include <machine/_sizes.h>
+
+#define CHAR_BIT		__CHAR_BIT__
 
 #define SCHAR_MIN		(-__SCHAR_MAX__ - 1)
 #define SCHAR_MAX		__SCHAR_MAX__
