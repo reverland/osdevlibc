@@ -40,8 +40,7 @@ double ceil(double x) {
 	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
 	controlWord |= 0x400; controlWord &= ~0x800;
 	asm volatile("fldcw %0" : : "m"(controlWord));
-	asm("frndint" : "+t"(x));
-	return x;
+	return nearbyintl(x);
 #else
 #warning ceil function not supported for this platform
 #endif
@@ -54,8 +53,7 @@ float ceilf(float x) {
 	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
 	controlWord |= 0x400; controlWord &= ~0x800;
 	asm volatile("fldcw %0" : : "m"(controlWord));
-	asm("frndint" : "+t"(x));
-	return x;
+	return nearbyintl(x);
 #else
 #warning ceilf function not supported for this platform
 #endif
@@ -68,8 +66,7 @@ long double ceill(long double x) {
 	asm volatile("fstcw %0" : : "m"(controlWord) : "memory");
 	controlWord |= 0x400; controlWord &= ~0x800;
 	asm volatile("fldcw %0" : : "m"(controlWord));
-	asm("frndint" : "+t"(x));
-	return x;
+	return nearbyintl(x);
 #else
 #warning ceill function not supported for this platform
 #endif
@@ -165,15 +162,55 @@ long double		truncl(long double x);
 double			fmod(double x, double y);
 float				fmodf(float x, float y);
 long double		fmodl(long double x, long double y);
-double			remainer(double x, double y);
-float				remainerf(float x, float y);
-long double		remainerl(long double x, long double y);
-double			remquo(double x, double y, int* quo);
-float				remquof(float x, float y, int* quo);
-long double		remquol(long double x, long double y, int* quo);
-double			copysign(double x, double y);
-float				copysignf(float x, float y);
-long double		copysignl(long double x, long double y);
+
+double remainer(double x, double y) {
+	double result;
+	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+	return result;
+}
+
+float remainerf(float x, float y) {
+	float result;
+	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+	return result;
+}
+
+long double remainerl(long double x, long double y) {
+	long double result;
+	asm("fld %2 ; fld %1 ; fprem ; fxch ; fincstp" : "=t"(result) : "m"(x), "m"(y));
+	return result;
+}
+
+double remquo(double x, double y, int* quo) {
+	*quo = (int)x / (int)y;
+	return remainer(x, y);
+}
+
+float remquof(float x, float y, int* quo) {
+	*quo = (int)x / (int)y;
+	return remainerf(x, y);
+}
+
+long double remquol(long double x, long double y, int* quo) {
+	*quo = (int)x / (int)y;
+	return remainerl(x, y);
+}
+
+double copysign(double x, double y) {
+	double magnitude = fabs(x);
+	return signbit(y) ? -magnitude : magnitude;
+}
+
+float copysignf(float x, float y) {
+	double magnitude = fabsf(x);
+	return signbit(y) ? -magnitude : magnitude;
+}
+
+long double copysignl(long double x, long double y) {
+	double magnitude = fabsl(x);
+	return signbit(y) ? -magnitude : magnitude;
+}
+
 double			nan(const char* tagp);
 float				nanf(const char* tagp);
 long double		nanl(const char* tagp);
@@ -183,9 +220,18 @@ long double		nextafterl(long double x, long double y);
 double			nexttoward(double x, long double y);
 float				nexttowardf(float x, long double y);
 long double		nexttowardl(long double x, long double y);
-double			fdim(double x, double y);
-float				fdimf(float x, float y);
-long double		fdiml(long double x, long double y);
+
+double fdim(double x, double y) {
+	return (x > y) ? (x - y) : 0;
+}
+
+float fdimf(float x, float y) {
+	return (x > y) ? (x - y) : 0;
+}
+
+long double fdiml(long double x, long double y) {
+	return (x > y) ? (x - y) : 0;
+}
 
 double fmax(double x, double y) {
 	return (x > y) ? x : y;
