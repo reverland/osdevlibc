@@ -1,0 +1,75 @@
+#!/bin/sh
+#
+#
+#   Copyright 2009 Pierre KRIEGER
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#   
+#
+
+
+# important variables
+host=
+cmake_options="-DCMAKE_SYSTEM_NAME=Generic"
+cmake_found=0
+project_path=`dirname $0`
+
+# analysing parameters
+while [ "$1" != "" ]
+do
+	param=`echo $1 | awk 'BEGIN { FS="=" } { print $1 }' `
+	arg=`echo $1 | awk 'BEGIN { FS="=" } { print $2 }' `
+	case $param in
+		"--help")
+			echo "Options:"
+			echo " --host=<machine>	specify the destination machine for the library"
+			echo ""
+			echo "Note: this script requires CMake to run"
+			echo ""
+			exit 0
+			;;
+			
+		"--host")
+			host=$arg
+			;;
+	esac
+	shift
+done
+
+# determining if cmake is available
+for i in `echo $PATH | awk 'BEGIN { RS=":" } { print $0 }' `
+do
+	if [ -e "$i/cmake" ]
+	then
+		cmake_found=1
+		break
+	fi
+done
+
+# execution really starts here
+echo "Starting configure script"
+
+if [ $cmake_found == 0 ]
+then
+	echo "Error: cmake program not found" 1>&2
+	echo "Please download it from cmake.org" 1>&2
+	exit 1
+fi
+
+if [ "$host" != "" ]
+then
+	cmake_options="$cmake_options -DCMAKE_C_COMPILER=$host-gcc"
+fi
+
+cmake $cmake_options $project_path
+
