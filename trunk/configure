@@ -30,6 +30,7 @@ do
 	arg=`echo $1 | awk 'BEGIN { FS="=" } { print $2 }' `
 	case $param in
 		"--help")
+			echo "Configure script as a CMake wrapper"
 			echo "Options:"
 			echo " --help			print this help"
 			echo " --host=<machine>	specify the destination machine for the library"
@@ -69,8 +70,11 @@ fi
 # building the toolchain
 echo "INCLUDE(CMakeForceCompiler)" > ./toolchain.cmake
 echo "SET(CMAKE_SYSTEM_NAME Generic)" >> ./toolchain.cmake
-echo "CMAKE_FORCE_C_COMPILER("$host"-gcc GNU)" >> ./toolchain.cmake
-echo "CMAKE_FORCE_CXX_COMPILER("$host"-g++ GNU)" >> ./toolchain.cmake
+if [ "$host" != "" ]
+then
+	echo "CMAKE_FORCE_C_COMPILER("$host"-gcc GNU)" >> ./toolchain.cmake
+	echo "CMAKE_FORCE_CXX_COMPILER("$host"-g++ GNU)" >> ./toolchain.cmake
+fi
 
 echo "Now executing cmake..."
 cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain.cmake $project_path
