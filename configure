@@ -77,5 +77,5 @@ then
 fi
 
 echo "Now executing cmake..."
-cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain.cmake $project_path
+cmake -DCMAKE_TOOLCHAIN_FILE=./toolchain.cmake $project_path/
 
