@@ -47,9 +47,9 @@ float fabsf(float x) {
 #ifdef _TARGET_X86_
 	asm("fabs" : "+t"(x));
 	return x;
-#elif defined(_TARGET_ARM_)
+/*#elif defined(_TARGET_ARM_)
 	asm("fmsr %%s0, %1 ; fabss %%s0, %%s0 ; fmrs %0, %%s0" : "=r"(x) : "r"(x) : "%s0");
-	return x;
+	return x;*/
 #else
 #warning fabsf function not available for this platform
 #endif
