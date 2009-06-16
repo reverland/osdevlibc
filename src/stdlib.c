@@ -33,8 +33,24 @@ int atoi(const char* str) {
 	return result;
 }
 
-long int				atol		(const char* nptr);
-long long int			atoll		(const char* nptr);
+long int atol(const char* str) {
+	long int result = 0;
+	while (isspace(*str))
+		str++;
+	while (isdigit(*str))
+		result = (result * 10) + (*(str++) - '0');
+	return result;
+}
+
+long long int atoll(const char* str) {
+	long long int result = 0;
+	while (isspace(*str))
+		str++;
+	while (isdigit(*str))
+		result = (result * 10) + (*(str++) - '0');
+	return result;
+}
+
 double				strtod	(const char* nptr, char** endptr);
 float					strtof		(const char* nptr, char** endptr);
 long double			strtold	(const char* nptr, char** endptr);
@@ -45,7 +61,7 @@ unsigned long long int	strtoull	(const char* nptr, char** endptr, int base);
 
 int rand() {
 	_rand_value = _rand_value * 110351524 + 12345;
-	return (_rand_value % RAND_MAX);
+	return (_rand_value % (RAND_MAX + 1));
 }
 
 void srand(unsigned int seed) {
@@ -83,12 +99,14 @@ ldiv_t ldiv(long int numer, long int denom) {
 
 lldiv_t lldiv(long long int numer, long long int denom) {
 	lldiv_t result;
-#ifdef _TARGET_X86_
-	// TODO: 
-#else
 	result.quot = numer / denom;
 	result.rem = numer % denom;
-#endif
 	return result;
 }
+
+int					mblen	(const char* s, size_t n);
+int					mbtowc	(wchar_t* pwc, const char* s, size_t n);
+int					wctomb	(char* s, wchar_t wc);
+size_t				mbstowcs	(wchar_t* pwcs, const char* s, size_t n);
+size_t				wcstombs	(char* s, const wchar_t* pwcs, size_t n);
 
