@@ -108,7 +108,8 @@ double cos(double x) {
 	asm("fcos" : "+t"(x));
 	return x;
 #else
-#warning cos function not supported for this platform
+	double xsquare = x * x;
+	return 1 - xsquare / 2 + xsquare * xsquare / 24 - xsquare * xsquare * xsquare / 720 + xsquare * xsquare * xsquare * xsquare / 40320;
 #endif
 }
 
@@ -117,7 +118,8 @@ float cosf(float x) {
 	asm("fcos" : "+t"(x));
 	return x;
 #else
-#warning cosf function not supported for this platform
+	float xsquare = x * x;
+	return 1 - xsquare / 2 + xsquare * xsquare / 24 - xsquare * xsquare * xsquare / 720 + xsquare * xsquare * xsquare * xsquare / 40320;
 #endif
 }
 
@@ -126,7 +128,8 @@ long double cosl(long double x) {
 	asm("fcos" : "+t"(x));
 	return x;
 #else
-#warning cosl function not supported for this platform
+	long double xsquare = x * x;
+	return 1 - xsquare / 2 + xsquare * xsquare / 24 - xsquare * xsquare * xsquare / 720 + xsquare * xsquare * xsquare * xsquare / 40320;
 #endif
 }
 

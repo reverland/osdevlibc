@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-#define	RAND_MAX		__INT_MAX__
+#define	RAND_MAX		(__INT_MAX__ - 1)
 
 typedef struct	{ int quot; int rem; }				div_t;
 typedef struct	{ long quot; long rem; }			ldiv_t;
@@ -52,9 +52,11 @@ long long int			llabs		(long long int j);
 div_t					div		(int numer, int denom);
 ldiv_t					ldiv		(long int numer, long int denom);
 lldiv_t				lldiv		(long long int numer, long long int denom);
-
-// TODO: 7.20.7 and 7.20.8
-
+int					mblen	(const char* s, size_t n);
+int					mbtowc	(wchar_t* pwc, const char* s, size_t n);
+int					wctomb	(char* s, wchar_t wc);
+size_t				mbstowcs	(wchar_t* pwcs, const char* s, size_t n);
+size_t				wcstombs	(char* s, const wchar_t* pwcs, size_t n);
 
 
 #ifdef __cplusplus
