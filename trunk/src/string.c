@@ -23,7 +23,7 @@
 void* memcpy(void* destination, const void* source, size_t num) {
 #if defined(__GNUC__) && defined(_TARGET_X86_)
 	void* temporaryDestination = destination;
-	asm volatile("cld ; rep movsl ; mov %3, %2 ; rep movsb" : "+S"(source), "+D"(temporaryDestination) : "c"(num / 4), "r"(num % 4) : "cc", "memory");
+	asm volatile("rep movsl ; mov %3, %2 ; rep movsb" : "+S"(source), "+D"(temporaryDestination) : "c"(num / 4), "r"(num % 4) : "cc", "memory");
 #else
 	const unsigned char* vsource = (const unsigned char*)source;
 	unsigned char* vdestination = (unsigned char*)destination;
@@ -39,7 +39,7 @@ void* memcpy(void* destination, const void* source, size_t num) {
 void* memmove(void* destination, const void* source, size_t num) {
 #ifdef _TARGET_X86_
 	if (destination < source)
-		asm volatile("cld; rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "cc", "memory");
+		asm volatile("rep movsb" :: "S"(source), "D"(destination), "c"((long)num) : "cc", "memory");
 	else
 		asm volatile("std; rep movsb; cld" :: "S"((unsigned char*)source + num - 1), "D"((unsigned char*)destination + num - 1), "c"((long)num) : "cc", "memory");
 #else
@@ -241,7 +241,7 @@ void* memset(void* ptr, int value, size_t num) {
 	}
 	
 	void* temporaryPtr = ptr;
-	asm volatile("cld ; rep stosl ; mov %3, %2 ; rep stosb" : "+D"(temporaryPtr) : "a"(value), "c"(num / 4), "r"(num % 4) : "cc", "memory");
+	asm volatile("rep stosl ; mov %3, %2 ; rep stosb" : "+D"(temporaryPtr) : "a"(value), "c"(num / 4), "r"(num % 4) : "cc", "memory");
 #else
 	unsigned char* vptr = (unsigned char*)ptr;
 	while (num) {
@@ -257,7 +257,7 @@ size_t strlen(const char* str) {
 	size_t len = 0;
 #if defined(__GNUC__) && defined(_TARGET_X86_)
 	const char* endPtr = str;
-	asm("cld ; repne scasb" : "+D"(endPtr) : "a"(0), "c"(~0) : "cc");
+	asm("repne scasb" : "+D"(endPtr) : "a"(0), "c"(~0) : "cc");
 	len = (endPtr - str) - 1;
 #else
 	while (*str != '\0') { str++; len++; }
