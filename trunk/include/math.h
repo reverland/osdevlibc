@@ -33,8 +33,13 @@ extern "C" {
 #define			isnormal(x)				__builtin_isnormal(x)
 #define			signbit(x)				(isnan(x) ? 0 : ((x) < 0))
 #else
-// TODO:
-#warning For the moment no floating-point macros supported without GCC
+// note: still to be tested
+#define			isinf(x)				(((x) != 0) && (2 * (x) == (x)))
+#define			isnan(x)				((x) != (x))
+#define			isfinite(x)				(!isinf(x))
+#define			isnormal(x)				(!isnan(x) && isfinite(x) && ((x) != 0))
+#define			signbit(x)				(isnan(x) ? 0 : ((x) < 0))
+#define			fpclassify(x)			(((x) == 0) ? 2 : (isinf(x) ? 3 : (isnan(x) ? 4 : 1)))
 #endif
 
 double			acos(double x);

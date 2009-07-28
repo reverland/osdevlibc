@@ -209,27 +209,27 @@ long double atanhl(long double x) {
 }
 
 double cosh(double x) {
-	return (exp(x) + exp(-x)) / 2;
+	return (exp(x) + exp(-x)) * 0.5;
 }
 
 float coshf(float x) {
-	return (exp(x) + exp(-x)) / 2;
+	return (exp(x) + exp(-x)) * 0.5;
 }
 
 long double coshl(long double x) {
-	return (exp(x) + exp(-x)) / 2;
+	return (exp(x) + exp(-x)) * 0.5;
 }
 
 double sinh(double x) {
-	return (exp(x) - exp(-x)) / 2;
+	return (exp(x) - exp(-x)) * 0.5;
 }
 
 float sinhf(float x) {
-	return (exp(x) - exp(-x)) / 2;
+	return (exp(x) - exp(-x)) * 0.5;
 }
 
 long double sinhl(long double x) {
-	return (exp(x) - exp(-x)) / 2;
+	return (exp(x) - exp(-x)) * 0.5;
 }
 
 double tanh(double x) {
